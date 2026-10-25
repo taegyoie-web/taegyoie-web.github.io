@@ -7,3 +7,12 @@ const projects = [
 const dialog=document.getElementById('projectDialog');let active=0;
 function openProject(index){active=index;const p=projects[index];document.getElementById('dialogIndex').textContent=`PROJECT / ${String(index+1).padStart(2,'0')}`;document.getElementById('dialogCategory').textContent=p.category;document.getElementById('dialogTitle').textContent=p.title;document.getElementById('dialogSubtitle').textContent=p.subtitle;document.getElementById('dialogOverview').textContent=p.overview;document.getElementById('dialogChallenge').textContent=p.challenge;document.getElementById('dialogOutcome').textContent=p.outcome;document.getElementById('dialogContributions').replaceChildren(...p.contributions.map(t=>{const li=document.createElement('li');li.textContent=t;return li}));dialog.showModal();dialog.scrollTop=0}
 document.querySelectorAll('[data-project]').forEach(b=>b.addEventListener('click',()=>openProject(projects.findIndex(p=>p.id===b.dataset.project))));document.getElementById('closeDialog').addEventListener('click',()=>dialog.close());document.getElementById('nextProject').addEventListener('click',()=>openProject((active+1)%projects.length));dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});const progress=document.getElementById('progress');window.addEventListener('scroll',()=>{const max=document.documentElement.scrollHeight-innerHeight;progress.style.width=(max>0?scrollY/max*100:0)+'%'},{passive:true});
+
+// Display development photos only for the gel-formulation case study.
+document.addEventListener('click', () => {
+  const gallery = document.getElementById('gelPhotoGallery');
+  const dialog = document.getElementById('projectDialog');
+  if (!gallery || !dialog) return;
+  const title = document.getElementById('dialogTitle')?.textContent || '';
+  gallery.hidden = !dialog.open || !title.includes('Gel');
+});
